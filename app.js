@@ -1,5 +1,6 @@
 const canvas = document.querySelector('#drawing-canvas')
 const ctx = canvas.getContext("2d")
+const VectorInput = document.querySelector('.vectorInput')
 canvas.setAttribute("width", window.innerWidth)
 canvas.setAttribute("height", window.innerHeight)
 
@@ -57,29 +58,32 @@ const mouseHandler = {
     mouseCurr: {}
 }
 
+let visibleVectors = false
+VectorInput.onchange = () => {
+    visibleVectors = visibleVectors ? false : true
+}
+
 window.addEventListener("resize", () => {
     canvas.setAttribute("width", window.innerWidth)
     canvas.setAttribute("height", window.innerHeight)
 })
-window.addEventListener("mousedown", (e) => {
+canvas.addEventListener("mousedown", (e) => {
     mouseHandler.mouseIsDown = true
     mouseHandler.mouseStart = {x: e.clientX, y: e.clientY}
 })
-window.addEventListener("touchstart", (e) => {
+canvas.addEventListener("touchstart", (e) => {
     mouseHandler.mouseIsDown = true
     mouseHandler.mouseStart = {x: e.touches[0].clientX, y: e.touches[0].clientY}
 })
-window.addEventListener("mouseup", (e) => {
+canvas.addEventListener("mouseup", (e) => {
     mouseHandler.mouseIsDown = false
     mouseHandler.mouseEnd = {x: e.clientX, y: e.clientY}
     rms.dx = (mouseHandler.mouseStart.x - e.clientX) / 200
     rms.dy = (mouseHandler.mouseStart.y - e.clientY) / 200
-    console.log(mouseHandler.mouseStart.x, e.clientX, rms.dx)
-    console.log(mouseHandler.mouseStart.y, e.clientY, rms.dy)
     rms.x = mouseHandler.mouseCurr.x
     rms.y = mouseHandler.mouseCurr.y
 })
-window.addEventListener("touchend", (e) => {
+canvas.addEventListener("touchend", (e) => {
     mouseHandler.mouseIsDown = false
     mouseHandler.mouseEnd = {x: e.clientX, y: e.clientY}
     rms.dx = (mouseHandler.mouseStart.x - mouseHandler.mouseCurr.x) / 200
@@ -87,10 +91,10 @@ window.addEventListener("touchend", (e) => {
     rms.x = mouseHandler.mouseCurr.x
     rms.y = mouseHandler.mouseCurr.y
 })
-window.addEventListener("mousemove", (e) => {
+canvas.addEventListener("mousemove", (e) => {
     mouseHandler.mouseCurr = {x: e.clientX, y: e.clientY}
 })
-window.addEventListener("touchmove", (e) => {
+canvas.addEventListener("touchmove", (e) => {
     mouseHandler.mouseCurr = {x: e.touches[0].clientX, y: e.touches[0].clientY}
 })
 function animate() {
@@ -118,6 +122,17 @@ function animate() {
     rms.dx = rms.dx - accX
     rms.move()
     rms.show()
+    if (visibleVectors) {
+        const scaledForceX = Fx / Math.pow(10, 15)
+        const scaledForceY = Fy / Math.pow(10, 15)
+        ctx.beginPath()
+        ctx.moveTo(rms.x, rms.y)
+        ctx.lineTo(rms.x - scaledForceX / 3, rms.y)
+        ctx.moveTo(rms.x, rms.y)
+        ctx.lineTo(rms.x, rms.y - scaledForceY / 3)
+        ctx.strokeStyle = "white"
+        ctx.stroke()
+    }
     window.requestAnimationFrame(animate)
 }
 animate()
