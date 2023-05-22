@@ -5,25 +5,25 @@ canvas.setAttribute("width", window.innerWidth)
 canvas.setAttribute("height", window.innerHeight)
 
 class Circle {
-    constructor(_x, _y, _radius, _dx, _dy, _acceleration, _mass) {
+    constructor(_x, _y, _radius, _vx, _vy, _acceleration, _mass) {
         this.x = _x
         this.y = _y
-        this.dx = _dx
-        this.dy = _dy
+        this.vx = _vx
+        this.vy = _vy
         this.radius = _radius
         this.acceleration = _acceleration
         this.mass = _mass
     }
     move() {
-        this.x = this.x + this.dx
-        this.y = this.y + this.dy
+        this.x = this.x + this.vx
+        this.y = this.y + this.vy
         // if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
-        //     this.dy = -0.5 * this.dy
+        //     this.vy = -0.5 * this.vy
         //     if (this.y + this.radius > canvas.height) this.y -= (this.y + this.radius - canvas.height)
         //     else if (this.y - this.radius < 0) this.y -= (this.y - this.radius + 0)
         // }
         // if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-        //     this.dx = -1 * this.dx
+        //     this.vx = -1 * this.vx
         //     if (this.x + this.radius > canvas.width) this.x -= (this.x + this.radius - canvas.width)
         //     else if (this.x - this.radius < 0) this.x -= (this.x - this.radius + 0)
         // }
@@ -37,15 +37,15 @@ class Circle {
 }
 
 function distance(x1, x2, y1, y2) {
-    const dx = x2 - x1
-    const dy = y2 - y1
-    return Math.sqrt(Math.pow(dx, 2) + Math.pow(dy, 2))
+    const vx = x2 - x1
+    const vy = y2 - y1
+    return Math.sqrt(Math.pow(vx, 2) + Math.pow(vy, 2))
 }
 
 function getAngle(x1, x2, y1, y2) {
-    const dx = x2 - x1
-    const dy = y2 - y1
-    return Math.atan2(dy, dx)
+    const vx = x2 - x1
+    const vy = y2 - y1
+    return Math.atan2(vy, vx)
 }
 
 
@@ -78,16 +78,16 @@ canvas.addEventListener("touchstart", (e) => {
 canvas.addEventListener("mouseup", (e) => {
     mouseHandler.mouseIsDown = false
     mouseHandler.mouseEnd = {x: e.clientX, y: e.clientY}
-    rms.dx = (mouseHandler.mouseStart.x - e.clientX) / 200
-    rms.dy = (mouseHandler.mouseStart.y - e.clientY) / 200
+    rms.vx = (mouseHandler.mouseStart.x - e.clientX) / 200
+    rms.vy = (mouseHandler.mouseStart.y - e.clientY) / 200
     rms.x = mouseHandler.mouseCurr.x
     rms.y = mouseHandler.mouseCurr.y
 })
 canvas.addEventListener("touchend", (e) => {
     mouseHandler.mouseIsDown = false
     mouseHandler.mouseEnd = {x: e.clientX, y: e.clientY}
-    rms.dx = (mouseHandler.mouseStart.x - mouseHandler.mouseCurr.x) / 200
-    rms.dy = (mouseHandler.mouseStart.y - mouseHandler.mouseCurr.y) / 200
+    rms.vx = (mouseHandler.mouseStart.x - mouseHandler.mouseCurr.x) / 200
+    rms.vy = (mouseHandler.mouseStart.y - mouseHandler.mouseCurr.y) / 200
     rms.x = mouseHandler.mouseCurr.x
     rms.y = mouseHandler.mouseCurr.y
 })
@@ -118,8 +118,8 @@ function animate() {
     const Fx = F1 * Math.cos(angle)
     const accX = Fx / rms.mass
     const accY = Fy / rms.mass
-    rms.dy = rms.dy - accY
-    rms.dx = rms.dx - accX
+    rms.vy = rms.vy - accY
+    rms.vx = rms.vx - accX
     rms.move()
     rms.show()
     if (visibleVectors) {
