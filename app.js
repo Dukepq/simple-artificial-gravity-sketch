@@ -39,7 +39,7 @@ function getAngle(x1, x2, y1, y2) {
 }
 
 
-const rms = new Circle(80, 150, 20, 0.5, 1.2, 0.1, Math.pow(5.972, 24))
+const rms = new Circle(canvas.width / 2 + 300, canvas.height / 2, 20, 0, 2.5, 0.1, Math.pow(5.972, 24))
 const staticMass = new Circle(canvas.width / 2, canvas.height / 2, 60, 0, 0, 0.1, Math.pow(1.9, 30))
 const mouseHandler = {
     mouseIsDown: false,
