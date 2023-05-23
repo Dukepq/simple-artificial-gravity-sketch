@@ -17,16 +17,6 @@ class Circle {
     move() {
         this.x = this.x + this.vx
         this.y = this.y + this.vy
-        // if (this.y + this.radius > canvas.height || this.y - this.radius < 0) {
-        //     this.vy = -0.5 * this.vy
-        //     if (this.y + this.radius > canvas.height) this.y -= (this.y + this.radius - canvas.height)
-        //     else if (this.y - this.radius < 0) this.y -= (this.y - this.radius + 0)
-        // }
-        // if (this.x + this.radius > canvas.width || this.x - this.radius < 0) {
-        //     this.vx = -1 * this.vx
-        //     if (this.x + this.radius > canvas.width) this.x -= (this.x + this.radius - canvas.width)
-        //     else if (this.x - this.radius < 0) this.x -= (this.x - this.radius + 0)
-        // }
     }
     show() {
         ctx.beginPath()
@@ -128,8 +118,29 @@ function animate() {
         ctx.beginPath()
         ctx.moveTo(rms.x, rms.y)
         ctx.lineTo(rms.x - scaledForceX / 3, rms.y)
+        console.log(scaledForceX)
+        if (scaledForceX > 0) {
+            ctx.lineTo((rms.x - scaledForceX / 3) + Math.sqrt(Math.abs(scaledForceX)), rms.y - Math.sqrt(Math.abs(scaledForceX)) / 2)
+            ctx.moveTo(rms.x - scaledForceX / 3, rms.y)
+            ctx.lineTo((rms.x - scaledForceX / 3) + Math.sqrt(Math.abs(scaledForceX)), rms.y + Math.sqrt(Math.abs(scaledForceX)) / 2)
+        } else if (scaledForceX < 0) {
+            ctx.lineTo((rms.x - scaledForceX / 3) - Math.sqrt(Math.abs(scaledForceX)), rms.y - Math.sqrt(Math.abs(scaledForceX)) / 2)
+            ctx.moveTo(rms.x - scaledForceX / 3, rms.y)
+            ctx.lineTo((rms.x - scaledForceX / 3) - Math.sqrt(Math.abs(scaledForceX)), rms.y + Math.sqrt(Math.abs(scaledForceX)) / 2)
+        }
         ctx.moveTo(rms.x, rms.y)
         ctx.lineTo(rms.x, rms.y - scaledForceY / 3)
+        if (scaledForceY < 0) {
+            ctx.lineTo(rms.x - Math.sqrt(Math.abs(scaledForceY)) / 2, (rms.y - scaledForceY / 3) - Math.sqrt(Math.abs(scaledForceY)) / 2)
+            ctx.moveTo(rms.x, rms.y - scaledForceY / 3)
+            ctx.lineTo(rms.x + Math.sqrt(Math.abs(scaledForceY)) / 2, (rms.y - scaledForceY / 3) - Math.sqrt(Math.abs(scaledForceY)) / 2)
+        } else if (scaledForceY > 0) {
+            ctx.lineTo(rms.x - Math.sqrt(Math.abs(scaledForceY)) / 2, (rms.y - scaledForceY / 3) + Math.sqrt(Math.abs(scaledForceY)) / 2)
+            ctx.moveTo(rms.x, rms.y - scaledForceY / 3)
+            ctx.lineTo(rms.x + Math.sqrt(Math.abs(scaledForceY)) / 2, (rms.y - scaledForceY / 3) + Math.sqrt(Math.abs(scaledForceY)) / 2)
+        }
+        
+        
         ctx.strokeStyle = "white"
         ctx.stroke()
     }
